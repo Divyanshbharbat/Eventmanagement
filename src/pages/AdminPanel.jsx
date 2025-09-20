@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { db } from "../index";
 import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import EventCard from '../Components/EventCard'
+import EventCard from '../Components/EventCard';
 import { useAuth } from "../Cprovider";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ export default function AdminPanel() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // 🔒 Restrict access
+  // Restrict access to admin
   useEffect(() => {
     if (!user || user.email !== "bharbatdivyansh1@gmail.com") {
       navigate("/"); 
@@ -49,19 +49,19 @@ export default function AdminPanel() {
   useEffect(() => {
     fetchEvents();
     fetchUsers();
+    window.scrollTo(0, 0);
   }, []);
 
   // Accept Event
-
-const handleAcceptEvent = async (id) => {
-  try {
-    const eventRef = doc(db, "events", id);
-    await updateDoc(eventRef, { status: true }); // ✅ use boolean, not string
-    setEvents(events.map((ev) => (ev.id === id ? { ...ev, status: true } : ev)));
-  } catch (err) {
-    console.error("Error updating event: ", err);
-  }
-};
+  const handleAcceptEvent = async (id) => {
+    try {
+      const eventRef = doc(db, "events", id);
+      await updateDoc(eventRef, { status: true }); // ✅ boolean true
+      setEvents(events.map(ev => ev.id === id ? { ...ev, status: true } : ev));
+    } catch (err) {
+      console.error("Error updating event: ", err);
+    }
+  };
 
   // Delete Event
   const handleDeleteEvent = async (id) => {
@@ -77,7 +77,7 @@ const handleAcceptEvent = async (id) => {
   const handleDeleteUser = async (id) => {
     try {
       await deleteDoc(doc(db, "users", id));
-      setUsers(users.filter((user) => user.id !== id));
+      setUsers(users.filter((u) => u.id !== id));
     } catch (err) {
       console.error("Error deleting user: ", err);
     }
@@ -105,17 +105,17 @@ const handleAcceptEvent = async (id) => {
               {/* Status Badge */}
               <span
                 className={`absolute top-4 right-4 px-3 py-1 text-sm font-semibold rounded-full shadow-md ${
-                  event.status === "accept"
+                  event.status
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}
               >
-                {event.status === "accept" ? "Approved" : "Pending"}
+                {event.status ? "Approved" : "Pending"}
               </span>
 
               {/* Action Buttons */}
               <div className="flex gap-3 mt-6">
-                {event.status !== "accept" && (
+                {!event.status && (
                   <button
                     onClick={() => handleAcceptEvent(event.id)}
                     className="flex-1 bg-purple-700 text-white py-2 rounded-lg shadow hover:bg-purple-800 transition font-medium"
@@ -152,9 +152,7 @@ const handleAcceptEvent = async (id) => {
             <tbody>
               {users.map((u) => (
                 <tr key={u.id} className="border-b border-purple-200">
-                
                   <td className="px-6 py-3 text-purple-900">{u.id || "N/A"}</td>
-
                   <td className="px-6 py-3 text-purple-900">{u.email}</td>
                   <td className="px-6 py-3 text-right">
                     <button

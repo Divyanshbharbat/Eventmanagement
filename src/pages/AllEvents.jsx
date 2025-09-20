@@ -29,7 +29,9 @@ export default function AllEvents() {
     };
     fetchEvents();
   }, []);
-
+useEffect(()=>{
+  window.scrollTo(0, 0);
+},[])
   const filteredEvents = events.filter(
     (event) =>
       event.title.toLowerCase().includes(search.toLowerCase()) ||
