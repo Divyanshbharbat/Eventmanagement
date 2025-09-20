@@ -52,15 +52,16 @@ export default function AdminPanel() {
   }, []);
 
   // Accept Event
-  const handleAcceptEvent = async (id) => {
-    try {
-      const eventRef = doc(db, "events", id);
-      await updateDoc(eventRef, { status: "accept" });
-      setEvents(events.map((ev) => (ev.id === id ? { ...ev, status: "accept" } : ev)));
-    } catch (err) {
-      console.error("Error updating event: ", err);
-    }
-  };
+
+const handleAcceptEvent = async (id) => {
+  try {
+    const eventRef = doc(db, "events", id);
+    await updateDoc(eventRef, { status: true }); // ✅ use boolean, not string
+    setEvents(events.map((ev) => (ev.id === id ? { ...ev, status: true } : ev)));
+  } catch (err) {
+    console.error("Error updating event: ", err);
+  }
+};
 
   // Delete Event
   const handleDeleteEvent = async (id) => {
