@@ -7,7 +7,7 @@ export default function EventCard({ event }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [showFullDesc, setShowFullDesc] = useState(false);
-
+console.log(event)
   const participantColors = useMemo(() => {
     const palette = [
       "bg-red-200 text-red-900",

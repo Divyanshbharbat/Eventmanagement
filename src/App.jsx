@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PaymentPage from "./PaymentPage";
 import EventRegistration from "./pages/EventRegistration";
+import MyEvents from "./pages/MyEvents";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login/>}/>
                   <Route path="/event/:uid" element={<EventRegistration />} />
           <Route path="/signup" element={<Signup/>}/>
+          <Route path="/myevents" element={<MyEvents/>}/>
         </Routes>
       </div>
       <Footer />

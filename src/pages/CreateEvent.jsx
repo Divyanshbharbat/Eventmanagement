@@ -17,16 +17,16 @@ export default function CreateEvent() {
     location: "",
     description: "",
     teamSize: "",
+    teamName: "",
     imgURL: "",
     prize: "",
     category: "",
   });
 
-  // Scroll to top and check auth
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!loading && !user) {
-      toast.success("Please login to create an event");
+      toast.error("Please login to create an event");
       navigate("/login");
     }
   }, [user, loading, navigate]);
@@ -46,14 +46,15 @@ export default function CreateEvent() {
       endDate,
       location,
       teamSize,
+      teamName,
       imgURL,
       prize,
       description,
       category,
     } = event;
 
-    if (!title || !startDate || !endDate || !location || !teamSize || !imgURL || !prize || !description || !category) {
-      return alert("Please fill all fields including category");
+    if (!title || !startDate || !endDate || !location || !teamSize || !teamName || !imgURL || !prize || !description || !category) {
+      return alert("Please fill all fields including team name");
     }
 
     if (new Date(endDate) < new Date(startDate)) {
@@ -65,6 +66,7 @@ export default function CreateEvent() {
         ...event,
         teamSize: Number(teamSize),
         participants: 0,
+        participantsList: [{ teamName }],
         status: false,
         img: event.imgURL,
         userId: user?.uid,
@@ -79,6 +81,7 @@ export default function CreateEvent() {
         location: "",
         description: "",
         teamSize: "",
+        teamName: "",
         imgURL: "",
         prize: "",
         category: "",
@@ -113,55 +116,16 @@ export default function CreateEvent() {
         {/* Left: Form */}
         <div className="flex-1">
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Event Title"
-              value={event.title}
-              onChange={(e) => setEvent({ ...event, title: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            <input
-              type="date"
-              placeholder="Start Date"
-              value={event.startDate}
-              onChange={(e) => setEvent({ ...event, startDate: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            <input
-              type="date"
-              placeholder="End Date"
-              value={event.endDate}
-              onChange={(e) => setEvent({ ...event, endDate: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            <input
-              type="text"
-              placeholder="Location"
-              value={event.location}
-              onChange={(e) => setEvent({ ...event, location: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            <input
-              type="number"
-              placeholder="Team Size"
-              value={event.teamSize}
-              onChange={(e) => setEvent({ ...event, teamSize: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={event.imgURL}
-              onChange={(e) => setEvent({ ...event, imgURL: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
-            <input
-              type="text"
-              placeholder="Prize"
-              value={event.prize}
-              onChange={(e) => setEvent({ ...event, prize: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
-            />
+            {["title","startDate","endDate","location","teamSize","teamName","imgURL","prize"].map((field) => (
+              <input
+                key={field}
+                type={field === "startDate" || field === "endDate" ? "date" : field === "teamSize" ? "number" : "text"}
+                placeholder={field === "teamName" ? "Team Name" : field.charAt(0).toUpperCase() + field.slice(1)}
+                value={event[field]}
+                onChange={(e) => setEvent({ ...event, [field]: e.target.value })}
+                className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+              />
+            ))}
             <select
               value={event.category}
               onChange={(e) => setEvent({ ...event, category: e.target.value })}
@@ -183,7 +147,7 @@ export default function CreateEvent() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-white text-purple-800 rounded-lg hover:bg-purple-800 transition font-semibold shadow-md hover:shadow-xl"
+              className="w-full py-3 bg-white text-purple-800 rounded-lg hover:bg-purple-800 hover:text-white transition font-semibold shadow-md hover:shadow-xl"
             >
               Create Event
             </button>

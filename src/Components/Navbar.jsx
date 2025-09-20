@@ -40,6 +40,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-4">
           <Link to="/home" className={linkClass("/home")}>Home</Link>
           <Link to="/all-events" className={linkClass("/all-events")}>All Events</Link>
+          <Link to="/myevents" className={linkClass("/myevents")}>My Events</Link>
 
           {user ? (
             <>
@@ -81,6 +82,13 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
           >
             Home
+          </Link>
+          <Link
+            to="/myevents"
+            className="block px-6 py-3 border-b border-gray-200"
+            onClick={() => setIsOpen(false)}
+          >
+          My Events
           </Link>
           <Link
             to="/all-events"

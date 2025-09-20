@@ -32,6 +32,14 @@ export default function Footer() {
       Home
     </NavLink>
   </li>
+   <NavLink 
+      to="/myevents" 
+      className={({ isActive }) => 
+        `hover:text-white ${isActive ? "text-white font-bold" : ""}`
+      }
+    >
+      My Events
+    </NavLink>
   <li>
     <NavLink 
       to="/all-events" 
@@ -61,6 +69,7 @@ export default function Footer() {
     >
       Admin
     </NavLink>
+  
   </li>
 </ul>
         </div>
